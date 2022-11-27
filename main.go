@@ -10,9 +10,9 @@
 package main
 
 import (
-	"github.com/danielmunro/otto-notification-service/internal"
-	"github.com/danielmunro/otto-notification-service/internal/middleware"
 	"github.com/rs/cors"
+	"github.com/third-place/notification-service/internal"
+	"github.com/third-place/notification-service/internal/middleware"
 	"log"
 	"net/http"
 )
