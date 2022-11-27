@@ -4,4 +4,4 @@ COPY . .
 RUN go get -d -v ./...
 RUN go build
 EXPOSE 8081
-ENTRYPOINT ["./otto-notification-service"]
+ENTRYPOINT ["./notification-service"]
