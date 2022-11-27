@@ -1,0 +1,135 @@
+openapi: "3.0.0"
+info:
+  title: Otto notification service
+  version: "1.0"
+paths:
+  /notification:
+    get:
+      operationId: getNotificationsForUserV1
+      summary: Get notifications for a user
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+        '403':
+          description: 403 response
+    patch:
+      operationId: acknowledgeNotificationsForUserV1
+      summary: Acknowledge notifications for user
+      requestBody:
+        description: the last seen notification
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationAcknowledgement"
+      responses:
+        '200':
+          description: 200 response
+components:
+  schemas:
+    Notification:
+      type: object
+      required:
+        - uuid
+        - user
+        - seen
+        - link
+        - description
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/User'
+        seen:
+          type: boolean
+          default: false
+        link:
+          type: string
+        notificationType:
+          $ref: '#/components/schemas/NotificationType'
+        triggered_by_user:
+          $ref: '#/components/schemas/User'
+    NotificationAcknowledgement:
+      type: object
+      required:
+        - datetime_started
+        - datetime_ended
+      properties:
+        datetime_started:
+          type: string
+          format: date-time
+        datetime_ended:
+          type: string
+          format: date-time
+    NotificationType:
+      type: string
+      enum:
+        - liked
+        - followed
+        - replied
+    Post:
+      type: object
+      required:
+        - uuid
+        - text
+        - draft
+        - user
+        - created_at
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        text:
+          type: string
+        draft:
+          type: boolean
+        visibility:
+          $ref: "#/components/schemas/Visibility"
+        user:
+          $ref: "#/components/schemas/User"
+        created_at:
+          type: string
+          format: date-time
+    Visibility:
+      type: string
+      enum:
+        - public
+        - following
+        - private
+    Follow:
+      type: object
+      required:
+        - uuid
+        - user
+        - following
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        deleted_at:
+          type: string
+          format: date-time
+        user:
+          $ref: "#/components/schemas/User"
+        following:
+          $ref: "#/components/schemas/User"
+    PostLike:
+      type: object
+      required:
+        - post
+        - user
+      properties:
+        post:
+          $ref: "#/components/schemas/Post"
+        user:
+          $ref: "#/components/schemas/User"
