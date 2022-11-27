@@ -1,4 +1,4 @@
-module github.com/danielmunro/otto-notification-service
+module github.com/third-place/notification-service
 
 go 1.19
 
