@@ -1,0 +1,44 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: notification-service
+  description: Third place notification service
+  links:
+    - url: https://github.com/third-place/notification-service
+      title: Git Repository
+spec:
+  type: service
+  lifecycle: production
+  owner: dev-team
+  providesApis:
+    - notification-service-api
+  dependsOn:
+    - resource:notification-service-db
+    - resource:kafka
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: notification-service-api
+  description: Third place notification service API
+  links:
+    - url: https://github.com/third-place/notification-service
+      title: Git Repository
+spec:
+  type: openapi
+  lifecycle: production
+  owner: dev-team
+  definition:
+    $text: https://github.com/third-place/notification-service/blob/main/api.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: notification-service-db
+  description: Third place notification service DB
+spec:
+  type: database
+  lifecycle: production
+  owner: dev-team
+  dependencyOf:
+    - api:notification-service
