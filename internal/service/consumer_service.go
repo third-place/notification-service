@@ -34,7 +34,10 @@ func (c *ConsumerService) UpsertPost(postModel *model.Post) {
 }
 
 func (c *ConsumerService) UpsertReply(replyModel *model.Reply) {
-	c.postService.UpsertReply(replyModel)
+	shouldSendNotification := c.postService.UpsertReply(replyModel)
+	if shouldSendNotification {
+		c.notificationService.CreateReplyNotification(replyModel)
+	}
 }
 
 func (c *ConsumerService) UpsertFollow(followModel *model.Follow) {

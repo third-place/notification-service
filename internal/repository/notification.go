@@ -2,9 +2,9 @@ package repository
 
 import (
 	"errors"
+	"github.com/jinzhu/gorm"
 	"github.com/third-place/notification-service/internal/entity"
 	"github.com/third-place/notification-service/internal/model"
-	"github.com/jinzhu/gorm"
 )
 
 type NotificationRepository struct {
@@ -16,6 +16,22 @@ func CreateNotificationRepository(conn *gorm.DB) *NotificationRepository {
 }
 
 func (n *NotificationRepository) FindPostLikeNotification(user *entity.User, postUser *entity.User, link string) (*entity.Notification, error) {
+	notification := &entity.Notification{}
+	n.conn.
+		Table("notifications").
+		Where(
+			"notifications.user_id = ? AND notifications.triggered_by_user_id = ? AND notifications.link = ?",
+			postUser.ID,
+			user.ID,
+			link,
+		).Find(notification)
+	if notification.ID == 0 {
+		return nil, errors.New("notification not found")
+	}
+	return notification, nil
+}
+
+func (n *NotificationRepository) FindReplyNotification(user *entity.User, postUser *entity.User, link string) (*entity.Notification, error) {
 	notification := &entity.Notification{}
 	n.conn.
 		Table("notifications").
