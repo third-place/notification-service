@@ -68,5 +68,5 @@ func (p *PostService) UpsertReply(replyModel *model.Reply) bool {
 	}
 	postEntity = mapper.GetPostEntityFromReplyModel(user.ID, replyModel, postEntity.ID)
 	p.postRepository.Create(postEntity)
-	return true
+	return replyModel.Post.Uuid != replyModel.User.Uuid
 }
