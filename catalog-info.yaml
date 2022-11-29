@@ -13,6 +13,7 @@ spec:
   providesApis:
     - notification-service-api
   dependsOn:
+    - api:user-service-api
     - resource:notification-service-db
     - resource:kafka
 ---
