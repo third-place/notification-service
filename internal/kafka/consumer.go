@@ -2,9 +2,9 @@ package kafka
 
 import (
 	"encoding/json"
+	"github.com/google/uuid"
 	"github.com/third-place/notification-service/internal/model"
 	"github.com/third-place/notification-service/internal/service"
-	"github.com/google/uuid"
 	"log"
 )
 
@@ -37,6 +37,8 @@ func loopKafkaReader() error {
 			readPost(consumerService, data.Value)
 		} else if *data.TopicPartition.Topic == "postLikes" {
 			readPostLikes(consumerService, data.Value)
+		} else if *data.TopicPartition.Topic == "replies" {
+			readReply(consumerService, data.Value)
 		}
 	}
 }
@@ -59,6 +61,16 @@ func readPost(consumerService *service.ConsumerService, data []byte) {
 	}
 	log.Print("upsert post :: ", postModel.Uuid)
 	consumerService.UpsertPost(postModel)
+}
+
+func readReply(consumerService *service.ConsumerService, data []byte) {
+	replyModel, err := model.DecodeMessageToReply(data)
+	if err != nil {
+		log.Print("error reading post kafka topic :: ", err)
+		return
+	}
+	log.Print("upsert reply :: ", replyModel.Uuid)
+	consumerService.UpsertReply(replyModel)
 }
 
 func userFollowed(consumerService *service.ConsumerService, data []byte) {

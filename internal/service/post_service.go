@@ -1,11 +1,11 @@
 package service
 
 import (
+	"github.com/google/uuid"
 	"github.com/third-place/notification-service/internal/db"
 	"github.com/third-place/notification-service/internal/mapper"
 	"github.com/third-place/notification-service/internal/model"
 	"github.com/third-place/notification-service/internal/repository"
-	"github.com/google/uuid"
 	"log"
 )
 
@@ -41,7 +41,31 @@ func (p *PostService) UpsertPost(postModel *model.Post) {
 			log.Print("user not found when upserting post :: ", postModel)
 			return
 		}
-		postEntity = mapper.GetPostEntityFromModel(user.ID, postModel)
+		postEntity = mapper.GetPostEntityFromPostModel(user.ID, postModel)
+		p.postRepository.Create(postEntity)
+	}
+}
+
+func (p *PostService) UpsertReply(replyModel *model.Reply) {
+	replyUuid, err := uuid.Parse(replyModel.Uuid)
+	if err != nil {
+		return
+	}
+	userUuid, err := uuid.Parse(replyModel.User.Uuid)
+	if err != nil {
+		return
+	}
+	postEntity, err := p.postRepository.FindOneByUuid(replyUuid)
+	if err == nil {
+		postEntity.UpdateReplyFromModel(replyModel)
+		p.postRepository.Save(postEntity)
+	} else {
+		user, err := p.userRepository.FindOneByUuid(userUuid)
+		if err != nil {
+			log.Print("user not found when upserting reply :: ", replyModel)
+			return
+		}
+		postEntity = mapper.GetPostEntityFromReplyModel(user.ID, replyModel, postEntity.ID)
 		p.postRepository.Create(postEntity)
 	}
 }

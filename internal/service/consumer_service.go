@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/third-place/notification-service/internal/model"
 	"github.com/google/uuid"
+	"github.com/third-place/notification-service/internal/model"
 )
 
 type ConsumerService struct {
@@ -31,6 +31,10 @@ func (c *ConsumerService) UpdateProfilePic(userUuid uuid.UUID, s3Key string) {
 
 func (c *ConsumerService) UpsertPost(postModel *model.Post) {
 	c.postService.UpsertPost(postModel)
+}
+
+func (c *ConsumerService) UpsertReply(replyModel *model.Reply) {
+	c.postService.UpsertReply(replyModel)
 }
 
 func (c *ConsumerService) UpsertFollow(followModel *model.Follow) {
