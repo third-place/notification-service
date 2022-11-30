@@ -129,7 +129,7 @@ func (n *NotificationService) CreateReplyNotification(replyModel *model.Reply) {
 		log.Print("post not found :: {}", postUuid)
 		return
 	}
-	link := "/r/" + replyModel.Uuid
+	link := "/p/" + replyModel.Post.Uuid + "/#" + replyModel.Uuid
 	search, _ := n.notificationRepository.FindReplyNotification(user, postEntity.User, link)
 	if search != nil {
 		log.Print("notification already found :: ", search.Uuid)
