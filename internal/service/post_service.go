@@ -55,10 +55,16 @@ func (p *PostService) UpsertReply(replyModel *model.Reply) bool {
 	if err != nil {
 		return false
 	}
-	postEntity, err := p.postRepository.FindOneByUuid(replyUuid)
+	postUuid, err := uuid.Parse(replyModel.Post.Uuid)
+	if err != nil {
+		log.Print("could not parse reply post uuid :: ", err)
+		return false
+	}
+	postEntity, err := p.postRepository.FindOneByUuid(postUuid)
+	replyEntity, err := p.postRepository.FindOneByUuid(replyUuid)
 	if err == nil {
-		postEntity.UpdateReplyFromModel(replyModel)
-		p.postRepository.Save(postEntity)
+		replyEntity.UpdateReplyFromModel(replyModel)
+		p.postRepository.Save(replyEntity)
 		return false
 	}
 	user, err := p.userRepository.FindOneByUuid(userUuid)
@@ -66,7 +72,7 @@ func (p *PostService) UpsertReply(replyModel *model.Reply) bool {
 		log.Print("user not found when creating reply :: ", replyModel)
 		return false
 	}
-	postEntity = mapper.GetPostEntityFromReplyModel(user.ID, replyModel, postEntity.ID)
-	p.postRepository.Create(postEntity)
+	replyEntity = mapper.GetPostEntityFromReplyModel(user.ID, replyModel, postEntity.ID)
+	p.postRepository.Create(replyEntity)
 	return replyModel.Post.Uuid != replyModel.User.Uuid
 }
