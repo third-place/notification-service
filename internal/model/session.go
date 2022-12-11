@@ -8,6 +8,7 @@
  */
 
 package model
+
 // Session struct for Session
 type Session struct {
 	User  User   `json:"user"`
