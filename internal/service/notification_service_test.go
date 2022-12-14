@@ -73,3 +73,68 @@ func Test_CanAcknowledge_Notifications(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func Test_CanCreate_PostLikeNotification(t *testing.T) {
+	// setup
+	svc := CreateTestService()
+	alice := util.CreateTestUser()
+	bob := util.CreateTestUser()
+	svc.UpsertUser(alice)
+	svc.UpsertUser(bob)
+	post := &model.Post{
+		Uuid: uuid.New().String(),
+		User: *alice,
+	}
+	svc.UpsertPost(post)
+
+	// given
+	svc.CreatePostLikeNotification(&model.PostLike{
+		Post: *post,
+		User: *bob,
+	})
+
+	// when
+	notifications, err := svc.GetNotifications(uuid.MustParse(alice.Uuid), 1)
+
+	// then
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(notifications) != 1 {
+		t.Fail()
+	}
+}
+
+func Test_CanCreate_ReplyNotification(t *testing.T) {
+	// setup
+	svc := CreateTestService()
+	alice := util.CreateTestUser()
+	bob := util.CreateTestUser()
+	svc.UpsertUser(alice)
+	svc.UpsertUser(bob)
+	post := &model.Post{
+		Uuid: uuid.New().String(),
+		User: *alice,
+	}
+	svc.UpsertPost(post)
+
+	// given
+	svc.CreateReplyNotification(&model.Reply{
+		Uuid: uuid.New().String(),
+		Post: *post,
+		User: *bob,
+	})
+
+	// when
+	notifications, err := svc.GetNotifications(uuid.MustParse(alice.Uuid), 1)
+
+	// then
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(notifications) != 1 {
+		t.Fail()
+	}
+}

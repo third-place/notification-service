@@ -6,6 +6,7 @@ import (
 	"github.com/third-place/notification-service/internal/mapper"
 	"github.com/third-place/notification-service/internal/model"
 	"github.com/third-place/notification-service/internal/repository"
+	"github.com/third-place/notification-service/internal/util"
 	"log"
 )
 
@@ -16,6 +17,14 @@ type PostService struct {
 
 func CreatePostService() *PostService {
 	conn := db.CreateDefaultConnection()
+	return &PostService{
+		repository.CreateUserRepository(conn),
+		repository.CreatePostRepository(conn),
+	}
+}
+
+func CreateTestPostService() *PostService {
+	conn := util.SetupTestDatabase()
 	return &PostService{
 		repository.CreateUserRepository(conn),
 		repository.CreatePostRepository(conn),
