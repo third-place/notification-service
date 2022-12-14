@@ -1,11 +1,12 @@
 package service
 
 import (
+	"github.com/google/uuid"
 	"github.com/third-place/notification-service/internal/db"
 	"github.com/third-place/notification-service/internal/mapper"
 	"github.com/third-place/notification-service/internal/model"
 	"github.com/third-place/notification-service/internal/repository"
-	"github.com/google/uuid"
+	"github.com/third-place/notification-service/internal/util"
 	"log"
 )
 
@@ -16,6 +17,12 @@ type UserService struct {
 func CreateUserService() *UserService {
 	return &UserService{
 		repository.CreateUserRepository(db.CreateDefaultConnection()),
+	}
+}
+
+func CreateTestUserService() *UserService {
+	return &UserService{
+		repository.CreateUserRepository(util.SetupTestDatabase()),
 	}
 }
 

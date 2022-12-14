@@ -7,6 +7,7 @@ import (
 	"github.com/third-place/notification-service/internal/mapper"
 	"github.com/third-place/notification-service/internal/model"
 	"github.com/third-place/notification-service/internal/repository"
+	"github.com/third-place/notification-service/internal/util"
 	"log"
 )
 
@@ -18,6 +19,15 @@ type NotificationService struct {
 
 func CreateNotificationService() *NotificationService {
 	conn := db.CreateDefaultConnection()
+	return &NotificationService{
+		repository.CreateUserRepository(conn),
+		repository.CreateNotificationRepository(conn),
+		repository.CreatePostRepository(conn),
+	}
+}
+
+func CreateTestNotificationService() *NotificationService {
+	conn := util.SetupTestDatabase()
 	return &NotificationService{
 		repository.CreateUserRepository(conn),
 		repository.CreateNotificationRepository(conn),
