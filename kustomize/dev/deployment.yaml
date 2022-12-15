@@ -74,7 +74,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: user-service
-                  key: jwt_key
+                  key: jwt-key
       imagePullSecrets:
         - name: dockerconfigjson-github-com
         - name: postgres-notification
