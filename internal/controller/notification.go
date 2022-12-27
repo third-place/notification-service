@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/third-place/notification-service/internal/model"
 	"github.com/third-place/notification-service/internal/service"
@@ -12,39 +12,34 @@ import (
 const notificationLimit = 100
 
 // AcknowledgeNotificationsForUserV1 - Acknowledge notifications for a user
-func AcknowledgeNotificationsForUserV1(w http.ResponseWriter, r *http.Request) {
-	session, err := util.GetSession(r.Header.Get("x-session-token"))
+func AcknowledgeNotificationsForUserV1(c *gin.Context) {
+	session, err := util.GetSession(c)
 	if err != nil {
-		w.WriteHeader(http.StatusForbidden)
+		c.Status(http.StatusForbidden)
 		return
 	}
-	notificationModel, _ := model.DecodeRequestToNotificationAcknowledgement(r)
+	notificationModel, _ := model.DecodeRequestToNotificationAcknowledgement(c.Request)
 	err = service.CreateNotificationService().AcknowledgeNotifications(
 		uuid.MustParse(session.User.Uuid),
 		notificationModel,
 	)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		c.Status(http.StatusInternalServerError)
 	}
 }
 
 // GetNotificationsForUserV1 - Get notifications for a user
-func GetNotificationsForUserV1(w http.ResponseWriter, r *http.Request) {
-	session, err := util.GetSession(r.Header.Get("x-session-token"))
+func GetNotificationsForUserV1(c *gin.Context) {
+	session, err := util.GetSession(c)
 	if err != nil {
-		w.WriteHeader(http.StatusForbidden)
+		c.Status(http.StatusForbidden)
 		return
 	}
 	notifications, err := service.CreateNotificationService().
 		GetNotifications(uuid.MustParse(session.User.Uuid), notificationLimit)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		c.Status(http.StatusBadRequest)
 		return
 	}
-	data, err := json.Marshal(notifications)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	_, _ = w.Write(data)
+	c.JSON(http.StatusOK, notifications)
 }
