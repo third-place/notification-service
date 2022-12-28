@@ -70,6 +70,9 @@ func (p *PostService) UpsertReply(replyModel *model.Reply) bool {
 		return false
 	}
 	postEntity, err := p.postRepository.FindOneByUuid(postUuid)
+	if err != nil {
+		return false
+	}
 	replyEntity, err := p.postRepository.FindOneByUuid(replyUuid)
 	if err == nil {
 		replyEntity.UpdateReplyFromModel(replyModel)
