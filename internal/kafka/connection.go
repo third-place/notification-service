@@ -20,7 +20,7 @@ func GetReader() *kafka.Consumer {
 		"images",
 		"follows",
 		"posts",
-		"postLikes",
+		"post-likes",
 		"replies",
 	}, nil)
 	return c

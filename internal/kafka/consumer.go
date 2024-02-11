@@ -35,7 +35,7 @@ func loopKafkaReader() error {
 			userFollowed(consumerService, data.Value)
 		} else if *data.TopicPartition.Topic == "posts" {
 			readPost(consumerService, data.Value)
-		} else if *data.TopicPartition.Topic == "postLikes" {
+		} else if *data.TopicPartition.Topic == "post-likes" {
 			readPostLikes(consumerService, data.Value)
 		} else if *data.TopicPartition.Topic == "replies" {
 			readReply(consumerService, data.Value)
