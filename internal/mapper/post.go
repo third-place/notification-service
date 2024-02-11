@@ -23,6 +23,6 @@ func GetPostEntityFromReplyModel(userId uint, reply *model.Reply, postId uint) *
 		Uuid:          &replyUuid,
 		Text:          reply.Text,
 		UserID:        userId,
-		ReplyToPostID: postId,
+		ReplyToPostID: &postId,
 	}
 }

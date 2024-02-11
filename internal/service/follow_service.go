@@ -1,11 +1,11 @@
 package service
 
 import (
+	"github.com/google/uuid"
 	"github.com/third-place/notification-service/internal/db"
 	"github.com/third-place/notification-service/internal/mapper"
 	"github.com/third-place/notification-service/internal/model"
 	"github.com/third-place/notification-service/internal/repository"
-	"github.com/google/uuid"
 )
 
 type FollowService struct {
@@ -32,8 +32,7 @@ func (f *FollowService) UpsertFollow(followModel *model.Follow) bool {
 	}
 	followEntity, err := f.followRepository.FindOneByUuid(followUuid)
 	if err == nil {
-		followEntity.DeletedAt = &followModel.DeletedAt
-		f.followRepository.Save(followEntity)
+		f.followRepository.Delete(followEntity)
 		return false
 	}
 	followingUuid, err := uuid.Parse(followModel.Following.Uuid)

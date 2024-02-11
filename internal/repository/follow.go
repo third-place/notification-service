@@ -2,9 +2,9 @@ package repository
 
 import (
 	"errors"
-	"github.com/third-place/notification-service/internal/entity"
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
+	"github.com/third-place/notification-service/internal/entity"
+	"gorm.io/gorm"
 )
 
 type FollowRepository struct {
@@ -15,8 +15,8 @@ func CreateFollowRepository(conn *gorm.DB) *FollowRepository {
 	return &FollowRepository{conn}
 }
 
-func (f *FollowRepository) Create(entity *entity.Follow) {
-	f.conn.Create(entity)
+func (f *FollowRepository) Create(follow *entity.Follow) {
+	f.conn.Create(follow)
 }
 
 func (f *FollowRepository) Save(follow *entity.Follow) {
@@ -30,4 +30,8 @@ func (f *FollowRepository) FindOneByUuid(uuid uuid.UUID) (*entity.Follow, error)
 		return nil, errors.New("user not found")
 	}
 	return follow, nil
+}
+
+func (f *FollowRepository) Delete(follow *entity.Follow) {
+	f.conn.Delete(follow)
 }

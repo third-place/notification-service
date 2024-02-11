@@ -2,9 +2,9 @@ package repository
 
 import (
 	"errors"
-	"github.com/jinzhu/gorm"
 	"github.com/third-place/notification-service/internal/entity"
 	"github.com/third-place/notification-service/internal/model"
+	"gorm.io/gorm"
 )
 
 type NotificationRepository struct {

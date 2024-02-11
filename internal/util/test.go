@@ -3,12 +3,12 @@ package util
 import (
 	"context"
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"github.com/third-place/notification-service/internal/db"
 	"github.com/third-place/notification-service/internal/entity"
 	"github.com/third-place/notification-service/internal/model"
+	"gorm.io/gorm"
 	"math/rand"
 	"strconv"
 	"time"

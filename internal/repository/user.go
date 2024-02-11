@@ -2,9 +2,9 @@ package repository
 
 import (
 	"errors"
-	"github.com/third-place/notification-service/internal/entity"
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
+	"github.com/third-place/notification-service/internal/entity"
+	"gorm.io/gorm"
 )
 
 type UserRepository struct {

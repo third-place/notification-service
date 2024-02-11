@@ -2,8 +2,8 @@ package entity
 
 import (
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
 	"github.com/third-place/notification-service/internal/model"
+	"gorm.io/gorm"
 )
 
 type Post struct {
@@ -12,7 +12,7 @@ type Post struct {
 	Draft         bool
 	UserID        uint
 	User          *User
-	ReplyToPostID uint `gorm:"foreignkey:Post"`
+	ReplyToPostID *uint `gorm:"foreignkey:Post;default:null"`
 	ReplyToPost   *Post
 	Visibility    model.Visibility `gorm:"default:'public'"`
 	Uuid          *uuid.UUID       `gorm:"type:uuid;default:uuid_generate_v4()"`
