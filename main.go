@@ -10,12 +10,15 @@
 package main
 
 import (
+	"fmt"
 	"github.com/rs/cors"
 	"github.com/third-place/notification-service/internal"
 	"github.com/third-place/notification-service/internal/kafka"
 	"github.com/third-place/notification-service/internal/middleware"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 )
 
 func main() {
@@ -29,10 +32,19 @@ func readKafka() {
 	log.Print("exit kafka loop")
 }
 
+func getServicePort() int {
+	servicePort, err := strconv.Atoi(os.Getenv("SERVICE_PORT"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return servicePort
+}
+
 func serveHttp() {
 	router := internal.NewRouter()
 	handler := cors.AllowAll().Handler(router)
-	log.Print("http listening on 8083")
-	log.Fatal(http.ListenAndServe(":8083",
+	port := getServicePort()
+	log.Printf("http listening on %d", port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port),
 		middleware.ContentTypeMiddleware(handler)))
 }

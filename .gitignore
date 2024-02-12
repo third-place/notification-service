@@ -1,4 +1,9 @@
-build/
 .idea/
 .env
+
+# dependencies
 vendor/
+charts/
+
+# osx
+.DS_Store
