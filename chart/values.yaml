@@ -21,7 +21,7 @@ service:
     KAFKA_SASL_USERNAME:
     KAFKA_SASL_PASSWORD:
 
-    POSTGRES_HOST: notification-service-postgresql.notification-service.svc.cluster.local
+    POSTGRES_HOST: notification-service-postgres.notification-service.svc.cluster.local
     POSTGRES_PORT: 5432
     POSTGRES_DBNAME: notification_service
     POSTGRES_USER: service_user
