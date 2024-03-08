@@ -10,10 +10,12 @@ jobs:
     uses: third-place/actions/.github/workflows/publish-docker-image.yaml@main
     secrets: inherit
     with:
-      name: third-place/notification-service
+      name: notification-service
       directory: .
   deploy-service:
     needs: publish-docker-image
-    uses: third-place/actions/.github/workflows/deploy-service.yaml@main
-    secrets:
-      PAT: ${{ secrets.CR_PAT }}
+    uses: third-place/actions/.github/workflows/deploy-env.yaml@main
+    secrets: inherit
+    with:
+      name: notification-service
+      env: dev
